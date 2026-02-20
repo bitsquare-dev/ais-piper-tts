@@ -1,0 +1,14 @@
+services:
+  piper-tts:
+    build: .
+    container_name: piper-tts
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - piper-voices:/voices
+    environment:
+      - TZ=Asia/Bangkok
+
+volumes:
+  piper-voices:
