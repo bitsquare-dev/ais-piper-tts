@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         curl \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir piper-tts
+RUN pip install --no-cache-dir piper-tts flask
 
 # Pre-download voice at build time so container starts instantly
 RUN mkdir -p /voices && \
