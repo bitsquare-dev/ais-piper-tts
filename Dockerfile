@@ -59,6 +59,9 @@ RUN curl -L -o /voices/ru_RU-dmitri-medium.onnx \
     curl -L -o /voices/ru_RU-dmitri-medium.onnx.json \
     "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium.onnx.json"
 
+# Mark /voices as a volume for persistence of dynamically downloaded voices
+VOLUME /voices
+
 COPY server.py /app/server.py
 WORKDIR /app
 
