@@ -4,6 +4,7 @@ from pydub import AudioSegment
 import wave
 import io
 import json
+import struct
 
 app = Flask(__name__)
 voice = PiperVoice.load("/voices/en_US-lessac-medium.onnx")
@@ -14,10 +15,18 @@ def synthesize():
     text = data.get("text", "")
     output_format = data.get("format", "wav")
 
-    # Generate WAV to buffer
+    # Collect audio from synthesize_stream_raw
+    audio_bytes = b""
+    for chunk in voice.synthesize_stream_raw(text):
+        audio_bytes += chunk
+
+    # Create WAV in memory
     wav_io = io.BytesIO()
     with wave.open(wav_io, "wb") as wav_file:
-        voice.synthesize(text, wav_file)
+        wav_file.setnchannels(1)
+        wav_file.setsampwidth(2)  # 16-bit
+        wav_file.setframerate(voice.config.sample_rate)
+        wav_file.writeframes(audio_bytes)
     wav_io.seek(0)
 
     if output_format == "mp3":
